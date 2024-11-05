@@ -10,10 +10,10 @@ export class GameService {
   enemies: Enemy[] = [];
   tower: Tower;
   bullets: Bullet[] = [];
-  private spawnInterval: number = 2000;
-  private maxEnemies: number = 10;
+  private spawnInterval: number = 1000;
+  private maxEnemies: number = 30;
   public hitCounter: number = 0;
-  public coins: number = 0;
+  public coins: number = 10;
 
   constructor() {
     // Plaats een enkele toren in het midden van het canvas (800x600)
@@ -133,14 +133,14 @@ export class GameService {
   upgradeRange(): void {
     if (this.coins >= 1) {
       this.coins--;
-      this.tower.range += 20;
+      this.tower.range += 10;
     }
   }
 
   upgradeFireRate(): void {
     if (this.coins >= 1) {
       this.coins--;
-      this.tower.fireRate = Math.max(100, this.tower.fireRate - 100); // Verlaag de vuursnelheid (limiet van minimaal 100 ms)
+      this.tower.fireRate = Math.max(100, this.tower.fireRate - 100);
     }
   }
 }

@@ -13,6 +13,11 @@ import { GameService } from '../services/game.service';
       <button (click)="upgradeDamage()">Increase Damage (Cost: 1 coin)</button>
       <button (click)="upgradeRange()">Increase Range (Cost: 1 coin)</button>
       <button (click)="upgradeFireRate()">Increase Fire Rate (Cost: 1 coin)</button>
+
+      <h3>Current Tower Stats</h3>
+      <p>Damage: {{ gameService.tower.damage }}</p>
+      <p>Range: {{ gameService.tower.range }}</p>
+      <p>Fire Rate: {{ gameService.tower.fireRate }} ms</p>
     </div>
   `,
   styles: [`
@@ -21,6 +26,9 @@ import { GameService } from '../services/game.service';
     }
     div {
       margin-top: 10px;
+    }
+    button {
+      margin-right: 5px;
     }
   `]
 })
