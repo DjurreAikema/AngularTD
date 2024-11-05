@@ -18,6 +18,9 @@ import {GameService} from '../services/game.service';
       <p>Damage: {{ gameService.tower.damage }}</p>
       <p>Range: {{ gameService.tower.range }}</p>
       <p>Fire Rate: {{ gameService.tower.fireRate }} ms</p>
+
+      <h3>Enemies</h3>
+      <p>Number of enemies: {{ gameService.enemies.length }}</p>
     </div>
   `,
   styles: [`
@@ -68,13 +71,14 @@ export class GameComponent implements AfterViewInit {
     this.ctx.fillStyle = 'blue';
     this.ctx.fillRect(tower.x - 10, tower.y - 10, 20, 20);
 
-    // Update kogels en teken ze
-    this.gameService.updateBullets();
-    this.gameService.bullets.forEach(bullet => {
-      this.ctx.fillStyle = 'black';
+    // Teken hitscan shots
+    this.gameService.hitscanShots.forEach(shot => {
+      this.ctx.strokeStyle = 'yellow';
+      this.ctx.lineWidth = 2;
       this.ctx.beginPath();
-      this.ctx.arc(bullet.x, bullet.y, 3, 0, 2 * Math.PI);
-      this.ctx.fill();
+      this.ctx.moveTo(shot.x1, shot.y1);
+      this.ctx.lineTo(shot.x2, shot.y2);
+      this.ctx.stroke();
     });
 
     window.requestAnimationFrame(() => this.updateGame());

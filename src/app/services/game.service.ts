@@ -1,7 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Enemy} from '../models/enemy.model';
-import {Tower} from '../models/tower.model';
-import {Bullet} from '../models/bullet.model';
+import { Injectable } from '@angular/core';
+import { Enemy } from '../models/enemy.model';
+import { Tower } from '../models/tower.model';
+
+interface HitscanShot {
+  x1: number; // Startpunt van de toren
+  y1: number;
+  x2: number; // Eindpunt bij de vijand
+  y2: number;
+  duration: number; // Tijd dat de lijn zichtbaar blijft
+}
 
 @Injectable({
   providedIn: 'root'
@@ -9,14 +16,14 @@ import {Bullet} from '../models/bullet.model';
 export class GameService {
   enemies: Enemy[] = [];
   tower: Tower;
-  bullets: Bullet[] = [];
-  private spawnInterval: number = 1000;
-  private maxEnemies: number = 30;
+  private spawnInterval: number = 100;
+  private maxEnemies: number = 1000;
   public hitCounter: number = 0;
-  public coins: number = 10;
+  public coins: number = 0;
+  public hitscanShots: HitscanShot[] = []; // Lijst van huidige hitscan shots
 
   constructor() {
-    this.tower = new Tower(400, 300, 150, 1000, 20);
+    this.tower = new Tower(400, 300, 500, 100, 25);
     this.startSpawningEnemies();
   }
 
@@ -29,7 +36,6 @@ export class GameService {
   }
 
   private spawnEnemy(): void {
-    // Spawnen van een vijand aan een willekeurige rand van het canvas
     const edge = Math.floor(Math.random() * 4);
     let x, y;
 
@@ -58,7 +64,6 @@ export class GameService {
 
   updateEnemies(): void {
     this.enemies.forEach(enemy => {
-      // Beweeg vijand naar het midden van het canvas (de toren)
       const deltaX = this.tower.x - enemy.x;
       const deltaY = this.tower.y - enemy.y;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -68,17 +73,15 @@ export class GameService {
       enemy.x += moveX;
       enemy.y += moveY;
 
-      // Controleer of vijand het centrum heeft bereikt
       if (distance < 10) {
         this.hitCounter++;
-        enemy.health = 0; // Verwijder vijand
+        enemy.health = 0;
       }
     });
 
-    // Verwijder vijanden met gezondheid minder dan of gelijk aan 0 en geef munt
     this.enemies = this.enemies.filter(enemy => {
       if (enemy.health <= 0) {
-        this.coins += 1;  // Voeg een munt toe als de vijand is verslagen
+        this.coins += 1;
         return false;
       }
       return true;
@@ -90,9 +93,24 @@ export class GameService {
       const target = this.findTargetInRange(this.tower);
       if (target) {
         this.tower.fire();
-        this.spawnBullet(this.tower, target);
+        target.health -= this.tower.damage;
+        if (target.health <= 0) {
+          this.coins += 1;
+        }
+
+        // Voeg een hitscan shot toe aan de lijst voor visualisatie
+        this.hitscanShots.push({
+          x1: this.tower.x,
+          y1: this.tower.y,
+          x2: target.x,
+          y2: target.y,
+          duration: 5 // De hitscan-lijn is zichtbaar voor 5 frames
+        });
       }
     }
+
+    // Verwijder hitscan shots die verlopen zijn
+    this.hitscanShots = this.hitscanShots.filter(shot => shot.duration-- > 0);
   }
 
   private findTargetInRange(tower: Tower): Enemy | null {
@@ -105,23 +123,6 @@ export class GameService {
     return null;
   }
 
-  private spawnBullet(tower: Tower, target: Enemy): void {
-    const bullet = new Bullet(tower.x, tower.y, 5, tower.damage, target);
-    this.bullets.push(bullet);
-  }
-
-  updateBullets(): void {
-    this.bullets.forEach(bullet => {
-      bullet.move();
-      if (bullet.hasHitTarget()) {
-        bullet.target.health -= bullet.damage;
-        // Verwijder de kogel als deze het doelwit raakt
-        this.bullets = this.bullets.filter(b => b !== bullet);
-      }
-    });
-  }
-
-  // Methods to upgrade the tower using coins
   upgradeDamage(): void {
     if (this.coins >= 1) {
       this.coins--;
@@ -132,14 +133,14 @@ export class GameService {
   upgradeRange(): void {
     if (this.coins >= 1) {
       this.coins--;
-      this.tower.range += 10;
+      this.tower.range += 20;
     }
   }
 
   upgradeFireRate(): void {
     if (this.coins >= 1) {
       this.coins--;
-      this.tower.fireRate = Math.max(100, this.tower.fireRate - 100);
+      this.tower.fireRate = Math.max(100, this.tower.fireRate - 100); // Verlaag de vuursnelheid (limiet van minimaal 100 ms)
     }
   }
 }
