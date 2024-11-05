@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Enemy } from '../models/enemy.model';
-import { Tower } from '../models/tower.model';
-import { Bullet } from '../models/bullet.model';
+import {Injectable} from '@angular/core';
+import {Enemy} from '../models/enemy.model';
+import {Tower} from '../models/tower.model';
+import {Bullet} from '../models/bullet.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,6 @@ export class GameService {
   public coins: number = 10;
 
   constructor() {
-    // Plaats een enkele toren in het midden van het canvas (800x600)
     this.tower = new Tower(400, 300, 150, 1000, 20);
     this.startSpawningEnemies();
   }

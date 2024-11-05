@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { GameService } from '../services/game.service';
+import {AfterViewInit, Component, ElementRef, inject, ViewChild} from '@angular/core';
+import {GameService} from '../services/game.service';
 
 @Component({
   selector: 'app-game',
@@ -24,9 +24,11 @@ import { GameService } from '../services/game.service';
     canvas {
       border: 1px solid black;
     }
+
     div {
       margin-top: 10px;
     }
+
     button {
       margin-right: 5px;
     }
@@ -36,7 +38,7 @@ export class GameComponent implements AfterViewInit {
 
   public gameService: GameService = inject(GameService);
 
-  @ViewChild('gameCanvas', { static: false }) gameCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('gameCanvas', {static: false}) gameCanvas!: ElementRef<HTMLCanvasElement>;
   private ctx!: CanvasRenderingContext2D;
 
   ngAfterViewInit() {
