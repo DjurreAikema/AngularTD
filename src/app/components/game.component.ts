@@ -60,7 +60,7 @@ export class GameComponent implements AfterViewInit {
     this.gameService.updateEnemies();
     this.gameService.enemies.forEach(enemy => {
       this.ctx.fillStyle = 'red';
-      this.ctx.fillRect(enemy.x, enemy.y, 20, 20);
+      this.ctx.fillRect(enemy.x, enemy.y, 10, 10);
       this.ctx.fillStyle = 'black';
       this.ctx.fillText(`${enemy.health}`, enemy.x, enemy.y - 5);
     });

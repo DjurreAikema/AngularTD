@@ -58,7 +58,7 @@ export class GameService {
         break;
     }
 
-    const newEnemy = new Enemy(x!, y!, 1, 100);
+    const newEnemy = new Enemy(x!, y!, 1, 25);
     this.enemies.push(newEnemy);
   }
 
