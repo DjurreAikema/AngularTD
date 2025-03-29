@@ -6,7 +6,7 @@ import {GameService} from '../services/game.service';
   standalone: true,
   imports: [],
   template: `
-    <canvas #gameCanvas width="800" height="600"></canvas>
+    <canvas #gameCanvas width="1200" height="1200"></canvas>
     <div>
       <p>Enemies reached the center: {{ gameService.hitCounter }}</p>
       <p>Coins: {{ gameService.coins }}</p>

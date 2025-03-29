@@ -23,7 +23,7 @@ export class GameService {
   public hitscanShots: HitscanShot[] = []; // Lijst van huidige hitscan shots
 
   constructor() {
-    this.tower = new Tower(400, 300, 500, 100, 25);
+    this.tower = new Tower(600, 600, 500, 100, 25);
     this.startSpawningEnemies();
   }
 
@@ -41,24 +41,24 @@ export class GameService {
 
     switch (edge) {
       case 0: // Bovenkant
-        x = Math.random() * 800;
+        x = Math.random() * 1200;
         y = 0;
         break;
       case 1: // Onderkant
-        x = Math.random() * 800;
-        y = 600;
+        x = Math.random() * 1200;
+        y = 1200;
         break;
       case 2: // Linkerkant
         x = 0;
-        y = Math.random() * 600;
+        y = Math.random() * 1200;
         break;
       case 3: // Rechterkant
-        x = 800;
-        y = Math.random() * 600;
+        x = 1200;
+        y = Math.random() * 1200;
         break;
     }
 
-    const newEnemy = new Enemy(x!, y!, 1, 25);
+    const newEnemy = new Enemy(x!, y!, 0.5, 25);
     this.enemies.push(newEnemy);
   }
 
